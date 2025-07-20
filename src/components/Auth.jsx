@@ -8,7 +8,12 @@ axios.defaults.withCredentials = true;
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'user' });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'user',
+  });
   const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,23 +40,40 @@ const AuthForm = () => {
       if (!isLogin) {
         // Sign Up
         await axios.post(`${BASE_URL}/signup`, formData);
-        // Then log in
+
+        // Auto login after signup
         const loginRes = await axios.post(`${BASE_URL}/login`, {
           email: formData.email,
           password: formData.password,
         });
+
         const { token, ...userInfo } = loginRes.data;
         dispatch(setCredentials({ user: userInfo, token }));
 
-        navigate('/');
+        // Redirect based on role
+        const role = userInfo.role;
+        if (role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/profile');
+        }
       } else {
         // Login
         const loginRes = await axios.post(`${BASE_URL}/login`, {
           email: formData.email,
           password: formData.password,
         });
-        dispatch(setCredentials({ user: loginRes.data }));
-        navigate('/');
+
+        const { token, ...userInfo } = loginRes.data;
+        dispatch(setCredentials({ user: userInfo, token }));
+        const role = loginRes.data.role;
+
+        // Redirect based on role
+        if (role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       }
     } catch (err) {
       console.error(err);
@@ -60,7 +82,7 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-background min-h-screen pt-10">
+    <div className="flex items-center justify-center bg-background min-h-screen">
       <div className="w-full max-w-md p-6 bg-base-300 shadow-md rounded-xl">
         <h2 className="text-2xl font-bold text-center mb-6 text-amber-400 opacity-90">
           {isLogin ? 'Welcome Back!' : 'Create an Account'}
@@ -68,20 +90,38 @@ const AuthForm = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
-            <div>
-              <label className="label">
-                <span className="label-text text-gray-300">Name</span>
-              </label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                onChange={handleChange}
-                value={formData.name}
-                className="input input-bordered w-full bg-black h-9 rounded-xl hover:border-amber-400"
-                required
-              />
-            </div>
+            <>
+              <div>
+                <label className="label">
+                  <span className="label-text text-gray-300">Name</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  onChange={handleChange}
+                  value={formData.name}
+                  className="input input-bordered w-full bg-black h-9 rounded-xl hover:border-amber-400"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="label">
+                  <span className="label-text text-gray-300">Role</span>
+                </label>
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  className="select select-bordered w-full bg-black text-white h-9 rounded-xl hover:border-amber-400"
+                  required
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </>
           )}
 
           <div>
@@ -114,7 +154,10 @@ const AuthForm = () => {
             />
           </div>
 
-          <button type="submit" className="btn bg-base-300 text-amber-400 hover:border-amber-400 w-full mt-3">
+          <button
+            type="submit"
+            className="btn bg-base-300 text-amber-400 hover:border-amber-400 w-full mt-3"
+          >
             {isLogin ? 'Login' : 'Sign Up'}
           </button>
           {error && <p className="text-red-500 flex justify-center">{error}</p>}
@@ -123,7 +166,10 @@ const AuthForm = () => {
         <div className="text-center mt-4">
           <span className="text-sm">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-            <button onClick={toggleMode} className="text-amber-400 hover:underline cursor-pointer">
+            <button
+              onClick={toggleMode}
+              className="text-amber-400 hover:underline cursor-pointer"
+            >
               {isLogin ? 'Sign up' : 'Login'}
             </button>
           </span>
