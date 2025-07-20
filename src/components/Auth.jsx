@@ -4,7 +4,6 @@ import { setCredentials } from '../utils/authSlice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-// Ensure axios includes credentials (cookies)
 axios.defaults.withCredentials = true;
 
 const AuthForm = () => {
