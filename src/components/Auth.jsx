@@ -82,8 +82,8 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-background min-h-screen">
-      <div className="w-full max-w-md p-6 bg-base-300 shadow-md rounded-xl">
+    <div className="flex items-center justify-center  min-h-screen">
+      <div className="w-full max-w-md p-6 bg-gray-800/40 shadow-md rounded-xl">
         <h2 className="text-2xl font-bold text-center mb-6 text-amber-400 opacity-90">
           {isLogin ? 'Welcome Back!' : 'Create an Account'}
         </h2>

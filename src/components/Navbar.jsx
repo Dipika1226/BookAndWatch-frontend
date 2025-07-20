@@ -1,19 +1,18 @@
 import { FaUser } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../utils/authSlice';
-import { useSelector } from "react-redux"
+import LocationDropdown from './LocationDropdown'
 
 export default function Navbar() {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   axios.defaults.withCredentials = true;
 
-   const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       await axios.post('http://localhost:7777/auth/logout');
       dispatch(logout());
@@ -26,22 +25,19 @@ export default function Navbar() {
   const handleProfileClick = () => {
     if (user) {
       navigate("/profile");
-    } else {
-      alert.error("Please log in to view your profile");
-      navigate("/"); // or redirect to login
     }
   };
 
   return (
-    <div className="navbar bg-base-300 shadow-sm relative px-4">
+    <div className="navbar bg-gray-900/30 shadow-sm relative px-4">
       {/* Brand - Left */}
       <div className="flex-1">
-        <Link to="/" className="text-2xl font-bold text-amber-400">
+        <Link to="/" className="text-2xl font-bold text-amber-400 opacity-90">
           Book&Watch
         </Link>
       </div>
 
-      {/* Search Bar - Centered (Only for logged-in users) */}
+      {/* Search Bar - Center (Only for logged-in users) */}
       {user && (
         <div className="absolute left-1/2 transform -translate-x-1/2 w-[500px] max-w-full">
           <input
@@ -51,6 +47,12 @@ export default function Navbar() {
           />
         </div>
       )}
+
+      {/* Location Dropdown */}
+      <div className="hidden md:flex items-center space-x-2">
+        <LocationDropdown />
+      </div>
+
 
       {/* User Icon - Right */}
       <div className="flex-none">
@@ -68,7 +70,6 @@ export default function Navbar() {
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content rounded-box z-10 mt-5 w-52 p-2 shadow bg-amber-400/5 backdrop-blur-md border border-white/10"
-
           >
             {user ? (
               <>
@@ -77,7 +78,7 @@ export default function Navbar() {
                   <button onClick={() => navigate("/profile")}>Profile</button>
                 </li>
                 <li className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15">
-                  <button onClick={() => navigate("/settings")}>Bookings</button>
+                  <button onClick={() => navigate("/bookings")}>Bookings</button>
                 </li>
                 <li
                   onClick={handleLogout}
