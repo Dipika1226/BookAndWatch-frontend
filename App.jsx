@@ -10,8 +10,8 @@ function App() {
   const { user } = useSelector((state) => state.auth);
   return (
     <BrowserRouter>
-      <Navbar />
       <div className="bg-gradient-to-br from-black via-[#030303] to-gray-900 min-h-screen">
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />

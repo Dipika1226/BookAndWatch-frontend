@@ -91,7 +91,7 @@ const HeroCarousel = () => {
 
           return (
             <SwiperSlide key={movie.id}>
-              <div className="relative w-full h-[65vh] sm:h-[75vh] overflow-hidden shadow-xl shadow-black/50 rounded-md">
+              <div className="relative w-full h-[65vh] sm:h-[75vh] overflow-hidden shadow-xl shadow-black/50">
                 {showTrailer ? (
                   <div className="absolute top-0 left-0 w-full h-full z-20 backdrop-blur-sm bg-black/60 rounded-md">
                     <iframe
@@ -119,7 +119,7 @@ const HeroCarousel = () => {
                     }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10" />
-                    <div className="relative z-20 px-4 sm:px-8 md:px-16 text-white max-w-xl h-full flex flex-col justify-center space-y-4 animate-fade-in">
+                    <div className="relative z-20 px-4 sm:px-8 md:px-16 text-white/85 max-w-xl h-full flex flex-col justify-center space-y-4 animate-fade-in">
                       <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight drop-shadow-lg">
                         {movie.title}
                       </h1>
@@ -149,12 +149,12 @@ const HeroCarousel = () => {
 
         {/* Custom Arrows */}
         <div className="custom-prev absolute z-30 left-3 top-1/2 transform -translate-y-1/2">
-          <button className="w-10 h-10 rounded-full bg-white text-black text-lg shadow-md hover:scale-110 transition">
+          <button className="w-10 h-10 rounded-full bg-white/30 text-black text-lg shadow-md hover:scale-110 transition">
             ❮
           </button>
         </div>
         <div className="custom-next absolute z-30 right-3 top-1/2 transform -translate-y-1/2">
-          <button className="w-10 h-10 rounded-full bg-white text-black text-lg shadow-md hover:scale-110 transition">
+          <button className="w-10 h-10 rounded-full bg-white/30 text-black text-lg shadow-md hover:scale-110 transition">
             ❯
           </button>
         </div>

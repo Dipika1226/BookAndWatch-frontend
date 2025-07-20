@@ -22,14 +22,8 @@ export default function Navbar() {
     }
   };
 
-  const handleProfileClick = () => {
-    if (user) {
-      navigate("/profile");
-    }
-  };
-
   return (
-    <div className="navbar bg-gray-900/30 shadow-sm relative px-4">
+    <div className="navbar bg-[#1C1D1D]/70 sticky top-0 z-50 shadow-sm px-4">
       {/* Brand - Left */}
       <div className="flex-1">
         <Link to="/" className="text-2xl font-bold text-amber-400 opacity-90">
@@ -43,7 +37,7 @@ export default function Navbar() {
           <input
             type="text"
             placeholder="Search"
-            className="input input-bordered input-sm w-full text-sm py-1 rounded-xl hover:border-amber-300 bg-gradient-to-br from-black to-gray-900"
+            className="input input-bordered input-sm w-full text-sm py-1 rounded-xl border-white/30 hover:border-amber-500 hover:shadow-[0_0_15px_rgba(255,191,0,0.5)] transition-all duration-500 bg-gradient-to-br from-black to-gray-900"
           />
         </div>
       )}
@@ -55,52 +49,51 @@ export default function Navbar() {
 
 
       {/* User Icon - Right */}
-      <div className="flex-none">
-        <div className="dropdown dropdown-end" onClick={handleProfileClick}>
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar p-2 hover:border-amber-400"
-          >
-            <div>
-              <FaUser className="text-white text-xl hover:text-amber-300" />
-            </div>
-          </div>
+<div className="flex-none">
+  <div className="dropdown dropdown-end">
+    <div
+      tabIndex={0}
+      role="button"
+      className="btn btn-ghost btn-circle avatar p-2 hover:border-amber-400"
+    >
+      <FaUser className="text-white text-xl hover:text-amber-300" />
+    </div>
 
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content rounded-box z-10 mt-5 w-52 p-2 shadow bg-amber-400/5 backdrop-blur-md border border-white/10"
+    <ul
+      tabIndex={0}
+      className="menu menu-sm dropdown-content rounded-box z-10 mt-7 w-52 p-2  divide-y divide-gray-900 border-white/10 bg-neutral-900/50 shadow-lg ring-1 ring-black/5 focus:outline-none"
+    >
+      {user ? (
+        <>
+          <li className="text-sm px-2 py-1 font-bold text-amber-400/80">{user.name}</li>
+          <li className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15">
+            <button onClick={() => navigate("/profile")}>Profile</button>
+          </li>
+          <li className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15">
+            <button onClick={() => navigate("/bookings")}>Bookings</button>
+          </li>
+          <li
+            onClick={handleLogout}
+            className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15"
           >
-            {user ? (
-              <>
-                <li className="text-sm px-2 py-1 font-bold text-amber-400/80">{user.name}</li>
-                <li className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15">
-                  <button onClick={() => navigate("/profile")}>Profile</button>
-                </li>
-                <li className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15">
-                  <button onClick={() => navigate("/bookings")}>Bookings</button>
-                </li>
-                <li
-                  onClick={handleLogout}
-                  className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15"
-                >
-                  <button>Logout</button>
-                </li>
-              </>
-            ) : (
-              <li className="text-sm text-gray-500 px-2 p-1">
-                🔒 Login first to access profile & bookings
-                <button
-                  className="btn btn-sm bg-amber-400/65 mt-2 w-full"
-                  onClick={() => navigate("/auth")}
-                >
-                  Login
-                </button>
-              </li>
-            )}
-          </ul>
-        </div>
-      </div>
+            <button>Logout</button>
+          </li>
+        </>
+      ) : (
+        <li className="text-sm text-gray-300 px-2 p-1">
+          🔒 Login first to access profile & bookings
+          <button
+            className="btn btn-sm bg-amber-400/65 mt-2 w-full"
+            onClick={() => navigate("/auth")}
+          >
+            Login
+          </button>
+        </li>
+      )}
+    </ul>
+  </div>
+</div>
+
     </div>
   );
 }

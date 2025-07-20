@@ -1,25 +1,24 @@
 // components/MovieCard.jsx
 
-import React from "react";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w300";
 
 const MovieCard = ({ movie }) => {
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 min-w-[190px] cursor-pointer">
+    <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-lg overflow-hidden shadow-md hover:shadow-amber-300/40 transition-all duration-300 transform hover:scale-102 min-w-[190px] max-w-[200px] cursor-pointer">
       <img
         src={`${POSTER_BASE_URL}${movie.poster_path}`}
         alt={movie.title}
-        className="w-full h-[270px] object-cover"
+        className="w-full h-[220px] object-cover"
       />
-      <div className="p-3">
-        <h3 className="text-md font-semibold text-gray-900 line-clamp-1">
+      <div className="p-2">
+        <h3 className="text-sm font-semibold text-gray-100 line-clamp-1">
           {movie.title}
         </h3>
-        <div className="text-sm text-gray-700 mt-1 flex items-center gap-2">
+        <div className="text-xs text-gray-400 mt-1 flex items-center gap-2">
           <span className="font-medium">
             ⭐ {movie.vote_average?.toFixed(1) || "N/A"}
           </span>
-          <span className="px-2 py-0.5 bg-gray-200 text-gray-800 rounded text-xs">
+          <span className="px-1.5 py-0.5 bg-gray-500 text-gray-900 rounded text-[10px]">
             {movie.original_language?.toUpperCase()}
           </span>
         </div>
