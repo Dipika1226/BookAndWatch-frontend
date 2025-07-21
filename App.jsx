@@ -5,6 +5,7 @@ import Auth from "./src/components/Auth";
 import Profile from "./src/components/Profile";
 import Home from "./src/components/Home";
 import AdminDashboard from "./src/components/AdminDashboard";
+import MovieDetails from "./src/components/MovieDetails";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -29,6 +30,7 @@ function App() {
               )
             }
           />
+          <Route path="/movie/:id" element={<MovieDetails />} />
         </Routes>
       </div>
     </BrowserRouter>
