@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import Navbar from "./src/components/Navbar";
 import Auth from "./src/components/Auth";
 import Profile from "./src/components/Profile";
-import Admin from "./src/components/Admin";
 import Home from "./src/components/Home";
+import AdminDashboard from "./src/components/AdminDashboard";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -23,7 +23,7 @@ function App() {
             path="/admin"
             element={
               user && user.role === "admin" ? (
-                <Admin />
+                <AdminDashboard />
               ) : (
                 <Navigate to="/" replace />
               )
