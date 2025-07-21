@@ -1,5 +1,3 @@
-// components/Home.jsx
-
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -90,12 +88,11 @@ const Home = () => {
 
   return (
     <main className="pb-16 ">
-      <HeroCarousel/>
+      <HeroCarousel />
       <MovieSection
         title="🎬 Now Playing"
         movies={nowPlaying}
         loading={loadingNow}
-        
       />
       <MovieSection
         title="🎟️ Upcoming Movies"
