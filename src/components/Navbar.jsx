@@ -25,6 +25,15 @@ export default function Navbar() {
     }
   };
 
+  const handleProfile = () =>{
+    if(user.role=='admin'){
+      navigate("/admin")
+    }
+    else{
+    navigate("/profile")
+    }
+  }
+
   return (
     <div className="navbar bg-[#1C1D1D]/70 sticky top-0 z-50 shadow-sm px-4 backdrop-blur-md">
       {/* Brand - Left */}
@@ -92,7 +101,7 @@ export default function Navbar() {
               <>
                 <li className="text-sm px-2 py-1 font-bold text-amber-400/80">{user.name}</li>
                 <li className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15">
-                  <button onClick={() => navigate("/profile")}>Profile</button>
+                  <button onClick={handleProfile}>Profile</button>
                 </li>
                 <li className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15">
                   <button onClick={() => navigate("/bookings")}>Bookings</button>
