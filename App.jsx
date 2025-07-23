@@ -6,6 +6,7 @@ import Profile from "./src/components/Profile";
 import Home from "./src/components/Home";
 import AdminDashboard from "./src/components/AdminDashboard";
 import MovieDetails from "./src/components/MovieDetails";
+import SeatBooking from "./src/components/SeatBooking";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -31,6 +32,7 @@ function App() {
             }
           />
           <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/book/:theaterId" element={<SeatBooking />} />
         </Routes>
       </div>
     </BrowserRouter>

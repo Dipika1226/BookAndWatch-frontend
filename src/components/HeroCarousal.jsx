@@ -6,7 +6,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-import { PlayIcon, TicketIcon } from "@heroicons/react/24/solid";
+import {
+  PlayIcon,
+  TicketIcon,
+  SpeakerWaveIcon,
+  SpeakerXMarkIcon,
+} from "@heroicons/react/24/solid";
 
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
@@ -15,8 +20,20 @@ const HeroCarousel = () => {
   const [activeTrailerKey, setActiveTrailerKey] = useState(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [trailerPlayedForSlide, setTrailerPlayedForSlide] = useState({});
+  const [isMuted, setIsMuted] = useState(true);
   const iframeRef = useRef(null);
+  const playerRef = useRef(null);
 
+  // Load YouTube IFrame API
+  useEffect(() => {
+    if (!window.YT) {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.body.appendChild(tag);
+    }
+  }, []);
+
+  // Fetch now playing movies
   useEffect(() => {
     const fetchNowPlaying = async () => {
       try {
@@ -28,16 +45,6 @@ const HeroCarousel = () => {
     };
     fetchNowPlaying();
   }, []);
-
-  useEffect(() => {
-    if (
-      nowPlaying.length &&
-      activeSlideIndex === 0 &&
-      !trailerPlayedForSlide[0]
-    ) {
-      fetchTrailer(nowPlaying[0].id, 0);
-    }
-  }, [activeSlideIndex, nowPlaying]);
 
   const fetchTrailer = async (movieId, slideIndex) => {
     try {
@@ -53,6 +60,22 @@ const HeroCarousel = () => {
           ...prev,
           [slideIndex]: true,
         }));
+
+        // Wait for iframe to mount
+        setTimeout(() => {
+          if (window.YT) {
+            playerRef.current = new window.YT.Player(
+              `yt-player-${trailer.key}`,
+              {
+                events: {
+                  onReady: (event) => {
+                    event.target.mute(); // mute by default
+                  },
+                },
+              }
+            );
+          }
+        }, 500);
       }
     } catch (err) {
       console.error("Error fetching trailer:", err.message);
@@ -63,6 +86,7 @@ const HeroCarousel = () => {
     if (iframeRef.current) {
       iframeRef.current.src = "";
     }
+    setIsMuted(true);
   };
 
   return (
@@ -81,7 +105,7 @@ const HeroCarousel = () => {
         loop={nowPlaying.length > 1}
         className="w-full h-[65vh] sm:h-[75vh]"
         onSlideChange={(swiper) => {
-          stopVideo(); // pause trailer on slide change
+          stopVideo();
           setActiveSlideIndex(swiper.realIndex);
           setActiveTrailerKey(null);
         }}
@@ -96,13 +120,36 @@ const HeroCarousel = () => {
                   <div className="absolute top-0 left-0 w-full h-full z-20 backdrop-blur-sm bg-black/60 rounded-md">
                     <iframe
                       ref={iframeRef}
+                      id={`yt-player-${activeTrailerKey}`}
                       className="absolute top-0 left-0 w-full h-full rounded-md"
-                      src={`https://www.youtube.com/embed/${activeTrailerKey}?autoplay=1&mute=0&controls=0&rel=0&modestbranding=1&showinfo=0&fs=0&enablejsapi=1`}
+                      src={`https://www.youtube.com/embed/${activeTrailerKey}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&showinfo=0&fs=0&enablejsapi=1`}
                       title={movie.title}
                       allow="autoplay; encrypted-media"
                       allowFullScreen
                       frameBorder="0"
+                      loading="lazy"
                     />
+
+                    {/* Mute/Unmute Button in Bottom-Left */}
+                    <button
+                      className="absolute bottom-4 left-4 z-30 p-2 rounded-full bg-black/70 text-white hover:bg-black/90 transition"
+                      onClick={() => {
+                        if (playerRef.current) {
+                          if (isMuted) {
+                            playerRef.current.unMute();
+                          } else {
+                            playerRef.current.mute();
+                          }
+                          setIsMuted((prev) => !prev);
+                        }
+                      }}
+                    >
+                      {isMuted ? (
+                        <SpeakerXMarkIcon className="w-6 h-6" />
+                      ) : (
+                        <SpeakerWaveIcon className="w-6 h-6" />
+                      )}
+                    </button>
                   </div>
                 ) : (
                   <div

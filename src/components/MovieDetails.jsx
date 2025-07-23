@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { PlayIcon } from "@heroicons/react/24/solid";
+import {
+  StarIcon,
+  ClockIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/solid";
+import TheaterShowtimes from "./TheaterShowtimes";
 
 const BACKDROP = "https://image.tmdb.org/t/p/original";
 const POSTER = "https://image.tmdb.org/t/p/w500";
@@ -54,34 +60,45 @@ const MovieDetails = () => {
               {movie.title}
             </h1>
 
-            <div className="text-sm text-gray-400 space-y-1">
-              {/* Runtime & Release Date in same line */}
-              <p>
-                {movie.runtime} mins • {movie.release_date}
-              </p>
+            {/* Ratings, Runtime, Release Date */}
+            <div className="flex items-center gap-4 text-sm text-gray-300">
+              {/* Rating */}
+              <div className="flex items-center gap-1">
+                <StarIcon className="w-4 h-4 text-amber-400" />
+                <span>{movie.vote_average?.toFixed(1)}</span>
+              </div>
 
-              {/* Genres in next line */}
-              {/* Genres */}
-              <div className="flex flex-wrap gap-2 mt-2">
-                {movie.genres.map((g) => (
-                  <span
-                    key={g.id}
-                    className="bg-white/20 text-white text-xs px-3 py-1 rounded-full border border-white/30 backdrop-blur-sm"
-                  >
-                    {g.name}
-                  </span>
-                ))}
+              {/* Runtime */}
+              <div className="flex items-center gap-1">
+                <ClockIcon className="w-4 h-4 text-amber-400" />
+                <span>
+                  {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m
+                </span>
+              </div>
+
+              {/* Release Date */}
+              <div className="flex items-center gap-1">
+                <CalendarDaysIcon className="w-4 h-4 text-amber-400" />
+                <span>
+                  {new Date(movie.release_date).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </span>
               </div>
             </div>
 
-            {/* Rating */}
-            <div className="flex items-center space-x-3 text-sm text-gray-300">
-              <span className="text-amber-400 font-semibold text-lg">
-                ⭐ {movie.vote_average.toFixed(1)}/10
-              </span>
-              <span className="text-gray-500">
-                ({movie.vote_count.toLocaleString()} votes)
-              </span>
+            {/* Genres */}
+            <div className="flex flex-wrap gap-2 mt-1">
+              {movie.genres.map((genre) => (
+                <span
+                  key={genre.id}
+                  className="px-3 py-1 rounded-full text-xs bg-white/10 text-white backdrop-blur-sm border border-white/20"
+                >
+                  {genre.name}
+                </span>
+              ))}
             </div>
 
             {/* Description */}
@@ -104,8 +121,8 @@ const MovieDetails = () => {
       </div>
 
       {/* Cast Section */}
-      <div className="mt-10 px-6 lg:px-20 pb-16 relative">
-        <h2 className="text-2xl font-bold mb-6 text-amber-400">Cast</h2>
+      <div className="mt-4 px-6 lg:px-15 pb-16 relative">
+        <h2 className="text-xl font-bold mb-6 text-amber-400">Cast</h2>
 
         {/* Scroll Buttons */}
         <button
@@ -114,7 +131,7 @@ const MovieDetails = () => {
               .getElementById("castScroll")
               .scrollBy({ left: -300, behavior: "smooth" })
           }
-          className="absolute left-4 top-[60%] transform -translate-y-1/2 z-10 rounded-full bg-black/40 backdrop-blur-md shadow-[0_0_15px_rgba(255,193,7,0.4)] hover:bg-black/60 p-2"
+          className="absolute left-4 top-[40%] transform -translate-y-1/2 z-10 rounded-full bg-black/40 backdrop-blur-md shadow-[0_0_15px_rgba(255,193,7,0.4)] hover:bg-black/60 p-1"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +155,7 @@ const MovieDetails = () => {
               .getElementById("castScroll")
               .scrollBy({ left: 300, behavior: "smooth" })
           }
-          className="absolute right-4 top-[60%] transform -translate-y-1/2 z-10 rounded-full bg-black/40 backdrop-blur-md shadow-[0_0_15px_rgba(255,193,7,0.4)] hover:bg-black/60 p-2"
+          className="absolute right-4 top-[40%] transform -translate-y-1/2 z-10 rounded-full bg-black/40 backdrop-blur-md shadow-[0_0_15px_rgba(255,193,7,0.4)] hover:bg-black/60 p-1"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +176,7 @@ const MovieDetails = () => {
         {/* Cast List */}
         <div
           id="castScroll"
-          className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth px-8"
+          className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-8"
         >
           {cast.slice(0, 12).map((actor) => (
             <div
@@ -167,15 +184,15 @@ const MovieDetails = () => {
               className="flex-shrink-0 w-24 text-center transition transform hover:scale-105"
             >
               <div className="group">
-                <div className="w-24 h-24 rounded-full mx-auto mb-2 relative overflow-hidden">
+                <div className="w-20 h-20 rounded-full mx-auto mb-2 relative overflow-hidden transition-shadow duration-300 group-hover:shadow-[0_0_15px_4px_rgba(255,193,7,0.6)]">
                   <img
                     src={
                       actor.profile_path
                         ? `${POSTER}${actor.profile_path}`
-                        : "https://via.placeholder.com/100x150"
+                        : "https://cdn-icons-png.flaticon.com/512/847/847969.png"
                     }
                     alt={actor.name}
-                    className="w-full h-full object-cover rounded-full transition duration-300 group-hover:shadow-[0_0_15px_4px_rgba(255,193,7,0.5)]"
+                    className="w-full h-full object-cover rounded-full"
                   />
                 </div>
                 <p className="text-sm font-semibold text-white truncate">
@@ -189,6 +206,8 @@ const MovieDetails = () => {
           ))}
         </div>
       </div>
+      {/* 🎬 Theaters & Showtimes Section */}
+      <TheaterShowtimes />
     </div>
   );
 };
