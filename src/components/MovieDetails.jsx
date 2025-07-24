@@ -7,7 +7,7 @@ import {
   ClockIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/solid";
-//import TheaterShowtimes from "./TheaterShowtimes";
+import TheaterShowtimes from "./TheaterShowtimes";
 
 const BACKDROP = "https://image.tmdb.org/t/p/original";
 const POSTER = "https://image.tmdb.org/t/p/w500";
