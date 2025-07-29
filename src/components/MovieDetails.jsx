@@ -7,7 +7,7 @@ import {
   ClockIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/solid";
-import TheaterShowtimes from "./TheaterShowtimes";
+import TheaterSection from "./TheaterSection";
 
 const BACKDROP = "https://image.tmdb.org/t/p/original";
 const POSTER = "https://image.tmdb.org/t/p/w500";
@@ -207,7 +207,7 @@ const MovieDetails = () => {
         </div>
       </div>
       {/* 🎬 Theaters & Showtimes Section */}
-      <TheaterShowtimes />
+      <TheaterSection />
     </div>
   );
 };

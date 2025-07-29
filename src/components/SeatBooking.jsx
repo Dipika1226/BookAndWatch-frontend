@@ -1,5 +1,5 @@
-// SeatBooking.jsx
 import { useState } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 const seatLayout = {
   A: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -14,10 +14,24 @@ const seatLayout = {
   J: [1, 2, 3, 4, 5, 6, 7, 8, 9],
 };
 
-const occupiedSeats = ["C5", "C6", "D5", "E9", "F8", "G4", "H7"]; // Example
+const occupiedSeats = ["C5", "C6", "D5", "E9", "F8", "G4", "H7"];
+
+const getSeatCategory = (seatId) => {
+  const row = seatId.charAt(0);
+  if (["A", "B", "C"].includes(row)) return { type: "Premium", price: 250 };
+  if (["D", "E", "F"].includes(row)) return { type: "Regular", price: 180 };
+  return { type: "Economy", price: 120 };
+};
 
 const SeatBooking = () => {
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const { theaterId } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const query = new URLSearchParams(location.search);
+  const time = query.get("time");
+  const priceFromURL = query.get("price");
 
   const toggleSeat = (seatId) => {
     if (occupiedSeats.includes(seatId)) return;
@@ -29,23 +43,41 @@ const SeatBooking = () => {
     );
   };
 
+  const totalAmount = selectedSeats.reduce((sum, seatId) => {
+    const { price } = getSeatCategory(seatId);
+    return sum + price;
+  }, 0);
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleProceed = () => {
+    if (selectedSeats.length === 0) return;
+    setShowModal(true);
+  };
+
+  const confirmBooking = () => {
+    // You can add navigation or API call here
+    setShowModal(false);
+    alert("Booking confirmed! 🚀 (replace with real logic)");
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white p-6 ">
-      {/* Movie Details */}
+    <div className="min-h-screen bg-black text-white p-6">
+      {/* Movie & Showtime Info */}
       <div className="bg-neutral-800 p-4 rounded-md mb-6 border border-neutral-600">
-        <h2 className="text-2xl font-semibold mb-2">The Dark Knight</h2>
+        <h2 className="text-2xl font-semibold mb-2">Booking for {theaterId}</h2>
         <p className="text-sm text-gray-300">
-          📍 AMC Empire 25 &nbsp; | &nbsp; 📅 Today, Jan 20 &nbsp; | &nbsp; ⏰
-          7:30 PM &nbsp; | &nbsp; 🎬 IMAX
+          📅 Today &nbsp; | &nbsp; ⏰ {time} &nbsp; | &nbsp; 🎟️ ₹{priceFromURL}
         </p>
       </div>
+
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Left: Seat Layout */}
+        {/* Seat Layout */}
         <div className="bg-neutral-800 p-6 rounded-lg w-full md:w-3/4 border border-neutral-700">
           <h3 className="text-white text-lg mb-4 text-center">SCREEN</h3>
           <div className="bg-gradient-to-r from-amber-600 to-yellow-100 h-1 mb-4 rounded" />
           <div className="flex flex-col gap-4 items-center text-sm font-medium mt-10">
-            {Object.entries(seatLayout).map(([rowLabel, rowSeats], index) => {
+            {Object.entries(seatLayout).map(([rowLabel, rowSeats]) => {
               const isGroupGap = rowLabel === "C" || rowLabel === "G";
               return (
                 <div
@@ -54,10 +86,7 @@ const SeatBooking = () => {
                     isGroupGap ? "mt-3" : ""
                   }`}
                 >
-                  {/* Row Label Left */}
                   <span className="w-5 text-white">{rowLabel}</span>
-
-                  {/* Seats */}
                   <div className="flex gap-3">
                     {rowSeats.map((seatNum) => {
                       const seatId = `${rowLabel}${seatNum}`;
@@ -65,10 +94,10 @@ const SeatBooking = () => {
                       const isOccupied = occupiedSeats.includes(seatId);
 
                       const seatColor = isOccupied
-                        ? "bg-blue-600 border-none "
+                        ? "bg-red-500 border-none"
                         : isSelected
-                        ? "bg-green-600 border-green-400"
-                        : "text-black border-none";
+                        ? "bg-amber-500 border-amber-300"
+                        : "text-black bg-blue-600 border-none";
 
                       return (
                         <div
@@ -81,8 +110,6 @@ const SeatBooking = () => {
                       );
                     })}
                   </div>
-
-                  {/* Row Label Right */}
                   <span className="w-5 text-white">{rowLabel}</span>
                 </div>
               );
@@ -90,23 +117,22 @@ const SeatBooking = () => {
           </div>
         </div>
 
-        {/* Right: Legend + Info */}
+        {/* Sidebar */}
         <div className="w-full md:w-1/4 flex flex-col gap-4">
           {/* Legend */}
           <div className="bg-neutral-800 rounded-lg p-4 border border-neutral-700">
             <h4 className="text-lg font-semibold mb-2">Legend</h4>
             <div className="flex flex-col gap-2 text-sm text-white">
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded-full bg-green-600"></div>{" "}
+                <div className="w-4 h-4 rounded-full bg-amber-500"></div>{" "}
                 Selected
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded-full bg-amber-500/50 "></div>{" "}
+                <div className="w-4 h-4 rounded-full bg-blue-500"></div>{" "}
                 Available
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded-full bg-amber-500"></div>{" "}
-                Occupied
+                <div className="w-4 h-4 rounded-full bg-red-500"></div> Occupied
               </div>
             </div>
           </div>
@@ -115,9 +141,9 @@ const SeatBooking = () => {
           <div className="bg-neutral-800 rounded-lg p-4 border border-neutral-700">
             <h4 className="text-lg font-semibold mb-2">Seat Categories</h4>
             <ul className="text-sm text-gray-300">
-              <li>👑 Premium — ₹250</li>
-              <li>⭐ Regular — ₹180</li>
-              <li>💺 Economy — ₹120</li>
+              <li>👑 Premium (A–C) — ₹250</li>
+              <li>⭐ Regular (D–F) — ₹180</li>
+              <li>💺 Economy (G–J) — ₹120</li>
             </ul>
           </div>
 
@@ -128,13 +154,19 @@ const SeatBooking = () => {
               <p className="text-sm text-gray-400">No seats selected</p>
             ) : (
               <>
-                <p className="text-sm text-gray-200">
+                <p className="text-sm text-gray-200 mb-1">
                   {selectedSeats.join(", ")}
                 </p>
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-sm text-gray-300">
                   Total Seats:{" "}
                   <span className="text-white font-semibold">
                     {selectedSeats.length}
+                  </span>
+                </p>
+                <p className="text-sm text-gray-300">
+                  Total Amount:{" "}
+                  <span className="text-white font-semibold">
+                    ₹{totalAmount}
                   </span>
                 </p>
               </>
@@ -142,15 +174,57 @@ const SeatBooking = () => {
           </div>
 
           {/* Buttons */}
-          <button className="bg-amber-500 hover:bg-amber-600 text-black py-2 rounded-md font-semibold mt-2">
+          <button
+            onClick={handleProceed}
+            className="bg-amber-500 hover:bg-amber-600 text-black py-2 rounded-md font-semibold mt-2 disabled:opacity-50"
+            disabled={selectedSeats.length === 0}
+          >
             Proceed to Payment
           </button>
-          <button className="bg-neutral-700 hover:bg-neutral-600 text-white py-2 rounded-md mt-2">
+
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-neutral-700 hover:bg-neutral-600 text-white py-2 rounded-md mt-2"
+          >
             ← Back to Showtimes
           </button>
         </div>
       </div>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+          <div className="bg-neutral-800 border border-neutral-600 p-6 rounded-lg w-11/12 max-w-md">
+            <h2 className="text-xl font-semibold mb-4 text-white">
+              Confirm Booking
+            </h2>
+            <p className="text-sm text-gray-300 mb-2">
+              🎟️ Selected Seats:{" "}
+              <span className="text-white font-semibold">
+                {selectedSeats.join(", ")}
+              </span>
+            </p>
+            <p className="text-sm text-gray-300 mb-4">
+              💰 Total Amount:{" "}
+              <span className="text-white font-semibold">₹{totalAmount}</span>
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 rounded-md bg-neutral-600 text-white hover:bg-neutral-500"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmBooking}
+                className="px-4 py-2 rounded-md bg-amber-500 text-black font-semibold hover:bg-amber-600"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 export default SeatBooking;
