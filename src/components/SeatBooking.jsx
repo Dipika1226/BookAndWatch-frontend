@@ -48,17 +48,16 @@ const SeatBooking = () => {
     return sum + price;
   }, 0);
 
-  const [showModal, setShowModal] = useState(false);
-
   const handleProceed = () => {
     if (selectedSeats.length === 0) return;
-    setShowModal(true);
-  };
-
-  const confirmBooking = () => {
-    // You can add navigation or API call here
-    setShowModal(false);
-    alert("Booking confirmed! 🚀 (replace with real logic)");
+    navigate("/payment", {
+      state: {
+        movie: "Desert Legends",
+        time,
+        seats: selectedSeats,
+        total: totalAmount,
+      },
+    });
   };
 
   return (
@@ -190,39 +189,6 @@ const SeatBooking = () => {
           </button>
         </div>
       </div>
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
-          <div className="bg-neutral-800 border border-neutral-600 p-6 rounded-lg w-11/12 max-w-md">
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              Confirm Booking
-            </h2>
-            <p className="text-sm text-gray-300 mb-2">
-              🎟️ Selected Seats:{" "}
-              <span className="text-white font-semibold">
-                {selectedSeats.join(", ")}
-              </span>
-            </p>
-            <p className="text-sm text-gray-300 mb-4">
-              💰 Total Amount:{" "}
-              <span className="text-white font-semibold">₹{totalAmount}</span>
-            </p>
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 rounded-md bg-neutral-600 text-white hover:bg-neutral-500"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmBooking}
-                className="px-4 py-2 rounded-md bg-amber-500 text-black font-semibold hover:bg-amber-600"
-              >
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

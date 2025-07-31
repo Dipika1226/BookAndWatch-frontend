@@ -4,7 +4,7 @@ import TheaterCard from "./TheaterCard";
 const TheaterSection = () => {
   const theaters = [
     {
-      id: "theater1",
+      id: "1",
       name: "INOX - R City Mall",
       location: "Ghatkopar, Mumbai",
       distance: "8.2 km",
@@ -32,7 +32,7 @@ const TheaterSection = () => {
       ],
     },
     {
-      id: "theater2",
+      id: "2",
       name: "PVR Phoenix Marketcity",
       location: "Kurla, Mumbai",
       distance: "6.5 km",

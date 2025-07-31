@@ -7,6 +7,9 @@ import Home from "./src/components/Home";
 import AdminDashboard from "./src/components/AdminDashboard";
 import MovieDetails from "./src/components/MovieDetails";
 import SeatBooking from "./src/components/SeatBooking";
+import PaymentPage from "./src/components/PaymentPage";
+import SuccessModal from "./src/components/SuccessModal";
+import ConfirmationPage from "./src/components/ConfirmationPage";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -33,6 +36,9 @@ function App() {
           />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/book/:theaterId" element={<SeatBooking />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/success" element={<SuccessModal />} />
+          <Route path="/confirmation" element={<ConfirmationPage />} />
         </Routes>
       </div>
     </BrowserRouter>
