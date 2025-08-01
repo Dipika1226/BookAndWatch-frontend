@@ -63,7 +63,7 @@ const TheaterSection = () => {
 
   return (
     <div className="px-4 sm:px-8 py-6">
-      <h2 className="text-white text-2xl font-bold mb-6">
+      <h2 className=" text-2xl font-bold mb-6 text-amber-500">
         Select Theater & Showtime
       </h2>
       {theaters.map((theater, i) => (

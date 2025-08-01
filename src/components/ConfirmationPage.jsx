@@ -160,17 +160,17 @@ const ConfirmationPage = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-col md:flex-row gap-4 justify-center mb-6">
-          <button className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-2 rounded font-medium flex items-center gap-2">
+          <button className="bg-yellow-500 hover:bg-amber-400 hover:shadow-amber-300 hover:shadow-2xl text-white px-6 py-2 rounded font-medium flex items-center gap-2">
             <Download className="w-4 h-4" />
             Download Ticket
           </button>
-          <button className="bg-[#1A1C22] border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black px-6 py-2 rounded font-medium flex items-center gap-2">
+          <button className="bg-[#1A1C22] text-white hover:bg-yellow-500 px-6 py-2 rounded font-medium flex items-center gap-2">
             <Share2 className="w-4 h-4" />
             Share Ticket
           </button>
           <button
             onClick={() => navigate("/")}
-            className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-2 rounded font-medium flex items-center gap-2"
+            className=" hover:bg-yellow-500 text-white px-6 py-2 rounded font-medium flex items-center gap-2 bg-[#1A1C22]"
           >
             <Home className="w-4 h-4" />
             Home
