@@ -64,12 +64,13 @@ const Home = () => {
   const [loadingPopular, setLoadingPopular] = useState(true);
 
   useEffect(() => {
+    const API = import.meta.env.VITE_API_URL;
     const fetchMovies = async () => {
       try {
         const [now, up, pop] = await Promise.all([
-          axios.get("http://localhost:7777/movies/now-playing"),
-          axios.get("http://localhost:7777/movies/upcoming"),
-          axios.get("http://localhost:7777/movies/popular"),
+          axios.get(`${API}/movies/now-playing`),
+          axios.get(`${API}/movies/upcoming`),
+          axios.get(`${API}/movies/popular`),
         ]);
         setNowPlaying(now.data);
         setUpcoming(up.data);

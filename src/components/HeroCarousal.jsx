@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/24/solid";
 
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
-
+const API = import.meta.env.VITE_API_URL;
 const HeroCarousel = () => {
   const [nowPlaying, setNowPlaying] = useState([]);
   const [activeTrailerKey, setActiveTrailerKey] = useState(null);
@@ -37,7 +37,7 @@ const HeroCarousel = () => {
   useEffect(() => {
     const fetchNowPlaying = async () => {
       try {
-        const res = await axios.get("http://localhost:7777/movies/now-playing");
+        const res = await axios.get(`${API}/movies/now-playing`);
         setNowPlaying(res.data.slice(0, 5));
       } catch (err) {
         console.error("Error fetching now playing movies:", err.message);
@@ -48,9 +48,7 @@ const HeroCarousel = () => {
 
   const fetchTrailer = async (movieId, slideIndex) => {
     try {
-      const res = await axios.get(
-        `http://localhost:7777/movies/trailer/${movieId}`
-      );
+      const res = await axios.get(`${API}/movies/trailer/${movieId}`);
       const trailer = res.data.results.find(
         (vid) => vid.type === "Trailer" && vid.site === "YouTube"
       );

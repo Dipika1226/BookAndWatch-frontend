@@ -17,9 +17,10 @@ export default function LocationDropdown() {
   };
 
   useEffect(() => {
+    const API = import.meta.env.VITE_API_URL;
     const fetchCities = async () => {
       try {
-        const res = await axios.get("http://localhost:7777/api/cities"); // Change base URL if needed
+        const res = await axios.get(`${API}/api/cities`); // Change base URL if needed
         setCities(res.data);
         setSelectedCity(res.data[0] || "Select City");
       } catch (err) {

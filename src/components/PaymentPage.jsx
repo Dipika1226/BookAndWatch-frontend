@@ -8,12 +8,10 @@ import BookingSummary from "../components/BookingSummary";
 const PaymentPage = () => {
   const [method, setMethod] = useState("card");
   const navigate = useNavigate();
-  const { state } = useLocation(); // receiving passed seat/ticket data
-
+  const { state } = useLocation();
   const handlePayment = () => {
-    // simulate successful payment
     setTimeout(() => {
-      navigate("/success", { state }); // redirect with state
+      navigate("/success", { state });
     }, 500);
   };
 

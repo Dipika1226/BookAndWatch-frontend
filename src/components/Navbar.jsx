@@ -1,10 +1,10 @@
-import { FaUser, FaSearch } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../utils/authSlice';
-import LocationDropdown from './LocationDropdown';
-import { useState } from 'react';
+import { FaUser, FaSearch } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../utils/authSlice";
+import LocationDropdown from "./LocationDropdown";
+import { useState } from "react";
 
 export default function Navbar() {
   const { user } = useSelector((state) => state.auth);
@@ -14,25 +14,24 @@ export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
 
   axios.defaults.withCredentials = true;
-
+  const API = import.meta.env.VITE_API_URL;
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:7777/auth/logout');
+      await axios.post(`${API}/auth/logout`);
       dispatch(logout());
-      navigate('/auth');
+      navigate("/auth");
     } catch (err) {
-      console.error('Logout failed', err);
+      console.error("Logout failed", err);
     }
   };
 
-  const handleProfile = () =>{
-    if(user.role=='admin'){
-      navigate("/admin")
+  const handleProfile = () => {
+    if (user.role == "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/profile");
     }
-    else{
-    navigate("/profile")
-    }
-  }
+  };
 
   return (
     <div className="navbar bg-[#1C1D1D]/70 sticky top-0 z-50 shadow-sm px-4 backdrop-blur-md">
@@ -99,12 +98,16 @@ export default function Navbar() {
           >
             {user ? (
               <>
-                <li className="text-sm px-2 py-1 font-bold text-amber-400/80">{user.name}</li>
+                <li className="text-sm px-2 py-1 font-bold text-amber-400/80">
+                  {user.name}
+                </li>
                 <li className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15">
                   <button onClick={handleProfile}>Profile</button>
                 </li>
                 <li className="text-muted-foreground hover:text-amber-300 hover:bg-amber-300/15">
-                  <button onClick={() => navigate("/bookings")}>Bookings</button>
+                  <button onClick={() => navigate("/bookings")}>
+                    Bookings
+                  </button>
                 </li>
                 <li
                   onClick={handleLogout}

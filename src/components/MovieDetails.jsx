@@ -19,8 +19,9 @@ const MovieDetails = () => {
   const [cast, setCast] = useState([]);
 
   useEffect(() => {
+    const API = import.meta.env.VITE_API_URL;
     const fetchDetails = async () => {
-      const res = await axios.get(`http://localhost:7777/movies/${id}`);
+      const res = await axios.get(`${API}/movies/${id}`);
       setMovie(res.data.movie);
       setCast(res.data.cast);
       const trailer = res.data.videos.find(

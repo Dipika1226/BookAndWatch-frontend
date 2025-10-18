@@ -1,26 +1,26 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '../utils/authSlice';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../utils/authSlice";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'user',
+    name: "",
+    email: "",
+    password: "",
+    role: "user",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const toggleMode = () => {
     setIsLogin((prev) => !prev);
-    setError('');
+    setError("");
   };
 
   const handleChange = (e) => {
@@ -32,10 +32,10 @@ const AuthForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
+    setError("");
+    const API = import.meta.env.VITE_API_URL;
     try {
-      const BASE_URL = 'http://localhost:7777/auth';
+      const BASE_URL = `${API}/auth`;
 
       if (!isLogin) {
         // Sign Up
@@ -52,10 +52,10 @@ const AuthForm = () => {
 
         // Redirect based on role
         const role = userInfo.role;
-        if (role === 'admin') {
-          navigate('/admin');
+        if (role === "admin") {
+          navigate("/admin");
         } else {
-          navigate('/profile');
+          navigate("/profile");
         }
       } else {
         // Login
@@ -69,15 +69,15 @@ const AuthForm = () => {
         const role = loginRes.data.role;
 
         // Redirect based on role
-        if (role === 'admin') {
-          navigate('/admin');
+        if (role === "admin") {
+          navigate("/admin");
         } else {
-          navigate('/');
+          navigate("/");
         }
       }
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.msg || 'Something went wrong');
+      setError(err.response?.data?.msg || "Something went wrong");
     }
   };
 
@@ -85,7 +85,7 @@ const AuthForm = () => {
     <div className="flex items-center justify-center  min-h-screen">
       <div className="w-full max-w-md p-6 bg-gray-800/40 shadow-md rounded-xl">
         <h2 className="text-2xl font-bold text-center mb-6 text-amber-400 opacity-90">
-          {isLogin ? 'Welcome Back!' : 'Create an Account'}
+          {isLogin ? "Welcome Back!" : "Create an Account"}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -158,19 +158,19 @@ const AuthForm = () => {
             type="submit"
             className="btn bg-base-300 text-amber-400 hover:border-amber-400 w-full mt-3"
           >
-            {isLogin ? 'Login' : 'Sign Up'}
+            {isLogin ? "Login" : "Sign Up"}
           </button>
           {error && <p className="text-red-500 flex justify-center">{error}</p>}
         </form>
 
         <div className="text-center mt-4">
           <span className="text-sm">
-            {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
+            {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
             <button
               onClick={toggleMode}
               className="text-amber-400 hover:underline cursor-pointer"
             >
-              {isLogin ? 'Sign up' : 'Login'}
+              {isLogin ? "Sign up" : "Login"}
             </button>
           </span>
         </div>

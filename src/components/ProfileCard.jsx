@@ -1,5 +1,5 @@
 import { LogOut } from "lucide-react";
-import { useDispatch , useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { logout } from "../utils/authSlice";
@@ -9,14 +9,14 @@ export default function ProfileCard() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleLogout = async() => {
-     try {
-      await axios.post('http://localhost:7777/auth/logout');
+  const API = import.meta.env.VITE_API_URL;
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${API}/auth/logout`);
       dispatch(logout());
-      navigate('/auth');
+      navigate("/auth");
     } catch (err) {
-      console.error('Logout failed', err);
+      console.error("Logout failed", err);
     }
   };
 
@@ -33,8 +33,12 @@ export default function ProfileCard() {
           </div>
 
           <div className="text-center space-y-1">
-            <h2 className="text-xl font-semibold text-gray-300">{user?.name || "Guest User"}</h2>
-            <p className="text-gray-500">{user?.email || "no-email@example.com"}</p>
+            <h2 className="text-xl font-semibold text-gray-300">
+              {user?.name || "Guest User"}
+            </h2>
+            <p className="text-gray-500">
+              {user?.email || "no-email@example.com"}
+            </p>
           </div>
 
           <button
